@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 const User = require('../models/User');
 
@@ -15,7 +16,7 @@ router.get('/register', (req, res) => {
 });
 
 
-// register handler
+// REGISTER HANDLING
 router.post('/register', (req, res) => {
     const { email, password, password2 } = req.body;
     let errors = [];
@@ -76,6 +77,23 @@ router.post('/register', (req, res) => {
             });
     }
     console.log(req.body);
+});
+
+
+// LOGIN HANDLING
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/users/login',
+        failureFlash: true
+    })(req, res, next);
+});
+      
+// LOGOUT HANDLING
+router.get('/logout', (req, res) => {
+    req.logout();
+    req.flash('success_msg', 'Logged out.');
+    res.redirect('/users/login');
 });
 
 module.exports = router;
