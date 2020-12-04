@@ -1,32 +1,67 @@
 if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').parse();
+    require('dotenv').config();
 }
 
+// INITIALIZE EXPRESS
 const express = require('express');
 const app = express();
 const expressLayouts = require('express-ejs-layouts');
+const flash = require('connect-flash');
+const session = require('express-session');
 
-// DEFAULT ROUTE
-const indexRouter = require('./routes/index');
+// INITIALIZE ROUTES
+const indexRoute = require('./routes/index');
+const usersRoute = require('./routes/users');
 
-// EFFECTIVE JAVASCRIPT
+// BODY PARSER
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// EXPRESS SESSION (https://www.npmjs.com/package/express-session)
+app.use(session({
+    secret: 'secret',
+    resave: true,
+    saveUninitialized: true
+}));
+
+// FLASH MESSAGE (https://www.npmjs.com/package/connect-flash)
+app.use(flash());
+app.use((req, res, next) => {
+    // local variables for registration success/error message
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    next();
+});
+
+
+// EJS TEMPLATING
+app.use(expressLayouts);
+app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.set('layout', 'layouts/layout');
 
-// EXPRESS ROUTING
-app.use(expressLayouts);
-app.use(express.static('public'));
+// ROUTE RENDERING
+app.get ('/login', (req, res) => {
+    res.render('login.ejs');
+});
+
+app.get ('/register', (req, res) => {
+    res.render('register.ejs');
+});
 
 // MONGODB INITIALIZATION
-// const mongoose = require('mongoose');
-// mongoose.connect(process.env.DATABASE_URL, {
-//     useNewUrlParser: true
-// });
-// const db = mongoose.connection;
-// db.on('error', error => console.error(error));
-// db.once('open', () => console.log('connected to Mongoose'));
+const mongoose = require('mongoose');
+mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true
+});
+const db = mongoose.connection;
+db.on('error', error => console.error(error));
+db.once('open', () => console.log('connected to Mongoose'));
 
-app.use('/', indexRouter);
+// ROUTE IMPLEMENTATION
+app.use('/', indexRoute);
+app.use('/users', usersRoute);
 
 app.listen(process.env.PORT || 3000);
