@@ -50,7 +50,8 @@ app.get ('/register', (req, res) => {
 
 // MONGODB INITIALIZATION
 const mongoose = require('mongoose');
-const db = require('./config/keys').MongoURI;
+//const db = require('./config/keys').MongoURI;
+const db = 'mongodb+srv://user:7TRMUafG4ldQiCHV@cluster0.vgevc.mongodb.net/account?retryWrites=true&w=majority'; // TEST
 mongoose.connect(db, { useNewUrlParser: true })
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
