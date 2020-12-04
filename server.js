@@ -1,6 +1,4 @@
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
+
 
 // INITIALIZE EXPRESS
 const express = require('express');
@@ -34,7 +32,6 @@ app.use((req, res, next) => {
     next();
 });
 
-
 // EJS TEMPLATING
 app.use(expressLayouts);
 app.use(express.static('public'));
@@ -53,12 +50,10 @@ app.get ('/register', (req, res) => {
 
 // MONGODB INITIALIZATION
 const mongoose = require('mongoose');
-mongoose.connect(process.env.DATABASE_URL, {
-    useNewUrlParser: true
-});
-const db = mongoose.connection;
-db.on('error', error => console.error(error));
-db.once('open', () => console.log('connected to Mongoose'));
+const db = require('./config/keys').MongoURI;
+mongoose.connect(db, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
 
 // ROUTE IMPLEMENTATION
 app.use('/', indexRoute);
