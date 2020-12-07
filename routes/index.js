@@ -4,6 +4,12 @@ const fetch = require('node-fetch');
 const { ensureAuthenticated } = require('../config/auth');
 const propertyData = "";
 
+const app = express();
+const path = require('path');
+const dir = path.join(__dirname, 'public');
+
+app.use(express.static(dir));
+
 
 // INDEX PAGE: LOGIN OR REGISTER
 router.get('/', (req, res) => {

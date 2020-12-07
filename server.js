@@ -9,6 +9,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 
+
 // INITIALIZE ROUTES
 const indexRoute = require('./routes/index');
 const usersRoute = require('./routes/users');

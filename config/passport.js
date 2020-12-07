@@ -30,7 +30,7 @@ module.exports = function(passport) {
         })
     );
 
-    // copied from documentation
+    // reference documentation
     // auth credentials will only be transmitted during login request
     // if authentication succeeds, a session will be established via a cookie
     // cookie used for serialize/deserialize in subsequent requests
