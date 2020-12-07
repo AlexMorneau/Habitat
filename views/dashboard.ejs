@@ -1,5 +1,57 @@
-<h1>dashboard</h1>
-<div>
-    <b>logged in as: <%= email %></b> <br>
-    <a href="/users/logout" class="btn btn-secondary">Logout</a>
+<div class="card card-body text-center">
+    <h1><i class="fas fa-compass"></i></h1>
+    <h1>DASHBOARD</h1>
+    <i>Logged in as: <b> <%= email %> </b> </i> <br>
+    <a href="/users/logout" type ="button" class="btn btn-outline-danger">LOGOUT</a>
+    <br><br>
 </div>
+
+
+<div>
+    <!--https://getbootstrap.com/docs/4.0/content/tables/-->
+    <table class="table table-striped table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Address</th>
+                <th scope="col">Property Type</th>
+                <th scope="col">Price</th>
+                <th scope="col">Size</th>
+                <th scope="col">When was this posted?</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <% for(var i=0; i < propertyData.length; i++) { %>
+            <tr>
+                <td><a href="<%= propertyData[i].Url %>"><%= propertyData[i].Address %></a></td>
+                <td><a href="<%= propertyData[i].Url %>"><%= propertyData[i]['Property Type'] %></a></td>
+                <td><a href="<%= propertyData[i].Url %>"><%= propertyData[i]['Floor Plans'][0]['Price'] %></a></td>
+                <td><a href="<%= propertyData[i].Url %>"><%= propertyData[i]['Floor Plans'][0]['Size'] %></a></td>
+                <td><a href="<%= propertyData[i].Url %>"><%= propertyData[i]['Age of Posting'] %></a></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+
+
+<% var data = propertyData %>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(e) {  
+        // var myObject = [];
+        // myObject.push(parsed);
+        // console.log(counter);
+        // var temp_string = `<%- JSON.stringify(data[0]) %>`;
+        // var temp_parsed = JSON.parse(temp_string);
+        // console.log(temp_parsed);
+        // var stringified = `<%- JSON.stringify(data[1]) %>`;
+        // var parsed = JSON.parse(stringified);
+        // console.log(parsed);
+        // var len = Object.keys(myObject).length
+        //console.log(len);
+        // console.log(parsed.Address);
+    });
+</script>

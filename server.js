@@ -1,3 +1,4 @@
+///////////////////////////////////////////////////////////////////////
 
 
 // INITIALIZE CONSTANTS
@@ -12,10 +13,21 @@ const passport = require('passport');
 const indexRoute = require('./routes/index');
 const usersRoute = require('./routes/users');
 
-// BODY PARSER
+// INITIALIZE BODY PARSER
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// INITIALIZE DATABASE (MONGO)
+const mongoose = require('mongoose');
+const db = require('./config/keys').MongoURI;
+mongoose.connect(db, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
+
+
+///////////////////////////////////////////////////////////////////////
+
 
 // EXPRESS SESSION (https://www.npmjs.com/package/express-session)
 require('./config/passport')(passport);
@@ -37,12 +49,15 @@ app.use((req, res, next) => {
     next();
 });
 
-// EJS TEMPLATING
+// EJS TEMPLATING (https://ejs.co/#docs)
 app.use(expressLayouts);
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 app.set('layout', 'layouts/layout');
+
+///////////////////////////////////////////////////////////////////////
+
 
 // ROUTE RENDERING
 app.get('/login', (req, res) => {
@@ -53,16 +68,10 @@ app.get('/register', (req, res) => {
     res.render('register.ejs');
 });
 
-// MONGODB INITIALIZATION
-const mongoose = require('mongoose');
-const db = require('./config/keys').MongoURI;
-//const db = 'mongodb+srv://user:7TRMUafG4ldQiCHV@cluster0.vgevc.mongodb.net/account?retryWrites=true&w=majority'; // TEST
-mongoose.connect(db, { useNewUrlParser: true })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
-
 // ROUTE IMPLEMENTATION
 app.use('/', indexRoute);
 app.use('/users', usersRoute);
+
+
 
 app.listen(process.env.PORT || 3000);
